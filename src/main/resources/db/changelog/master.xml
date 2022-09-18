@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <property name="number" value="java.sql.Types.NUMERIC(10,0)" dbms="h2,postgresql"/>
+    <property name="monetary" value="java.sql.Types.NUMERIC(15,2)" dbms="h2,postgresql"/>
+
+    <!-- DOMAINS -->
+    <include file="domain/account.xml" relativeToChangelogFile="true"/>
+    <include file="domain/operation_type.xml" relativeToChangelogFile="true"/>
+    <include file="domain/transaction.xml" relativeToChangelogFile="true"/>
+
+    <!-- INSERTS -->
+    <include file="inserts/inserts_operations_types.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

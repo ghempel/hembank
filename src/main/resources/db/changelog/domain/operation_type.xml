@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="CREATE_TABLE_OPERATION_TYPE" author="gabriel.hempel">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN" onFailMessage="The OPERATION_TYPE table already exists">
+            <not>
+                <tableExists tableName="OPERATION_TYPE"/>
+            </not>
+        </preConditions>
+        <createTable tableName="OPERATION_TYPE">
+            <column name="ID" type="number">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_operation_type"/>
+            </column>
+            <column name="DESCRIPTION" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
