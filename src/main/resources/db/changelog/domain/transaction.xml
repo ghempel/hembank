@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="CREATE_TABLE_TRANSACTION" author="gabriel.hempel">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN" onFailMessage="The TRANSACTION table already exists">
+            <not>
+                <tableExists tableName="TRANSACTION"/>
+            </not>
+        </preConditions>
+        <createTable tableName="TRANSACTION">
+            <column name="ID" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_transaction"/>
+            </column>
+            <column name="ACCOUNT_ID" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="OPERATION_TYPE_ID" type="${number}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AMOUNT" type="${monetary}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EVENT_DATE" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="ADD_FK_TRANSACTION_ACCOUNT" author="gabriel.hempel">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_TRANSACTION_ACCOUNT" foreignKeyTableName="TRANSACTION"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="TRANSACTION"
+                                 baseColumnNames="ACCOUNT_ID"
+                                 constraintName="FK_TRANSACTION_ACCOUNT"
+                                 referencedTableName="ACCOUNT"
+                                 referencedColumnNames="ID"/>
+    </changeSet>
+
+    <changeSet id="ADD_FK_TRANSACTION_OPERATYON_TYPE" author="gabriel.hempel">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_TRANSACTION_OPERATYON_TYPE" foreignKeyTableName="TRANSACTION"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="TRANSACTION"
+                                 baseColumnNames="OPERATION_TYPE_ID"
+                                 constraintName="FK_TRANSACTION_OPERATYON_TYPE"
+                                 referencedTableName="OPERATION_TYPE"
+                                 referencedColumnNames="ID"/>
+    </changeSet>
+
+
+</databaseChangeLog>
