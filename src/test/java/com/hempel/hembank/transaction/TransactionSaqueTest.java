@@ -1,14 +1,12 @@
 package com.hempel.hembank.transaction;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.hempel.hembank.domain.Account;
 import com.hempel.hembank.domain.Transaction;
 import com.hempel.hembank.dto.TransactionDTO;
 import com.hempel.hembank.enums.OperationType;

@@ -3,3 +3,9 @@ spring:
         name: hembank-api
     liquibase:
         change-log: classpath:db/changelog/master.xml
+    jpa:
+        hibernate.ddl-auto: none
+        properties:
+            hibernate:
+                show_sql: true
+                format_sql: true

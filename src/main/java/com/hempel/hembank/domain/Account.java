@@ -34,13 +34,9 @@ public class Account {
     private UUID id;
 
     @NotEmpty
-    @Length(max = 20)
+    @Length(max = 11)
     @Column(name = "document_number")
     private String documentNumber;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "account_id", nullable = false, updatable = false)
-    private final List<Transaction> transactions = new ArrayList<>();
 
     public static Account of(UUID id) {
         Account account = new Account();

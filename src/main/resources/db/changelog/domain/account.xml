@@ -15,7 +15,7 @@
             <column name="ID" type="uuid">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_account"/>
             </column>
-            <column name="DOCUMENT_NUMBER" type="varchar(20)">
+            <column name="DOCUMENT_NUMBER" type="varchar(11)">
                 <constraints nullable="false" uniqueConstraintName="uk_document_number_account"/>
             </column>
         </createTable>

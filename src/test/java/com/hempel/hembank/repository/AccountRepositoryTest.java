@@ -50,10 +50,16 @@ public class AccountRepositoryTest {
     }
 
     @Test
-    public void existsByDocumentNumber() {
+    public void findByDocumentNumber() {
 
-        assertThat(accountRepository.existsByDocumentNumber("12345678900")).isTrue();
-        assertThat(accountRepository.existsByDocumentNumber("12345678977")).isFalse();
+        UUID id = UUID.fromString("9e31f5d7-6964-4fe5-a22c-9254db0e178c");
+
+        Account account = accountRepository.findByDocumentNumber("12345678900");
+
+        assertThat(account).isNotNull();
+        assertThat(account).isEqualTo(Account.of(id));
+
+        assertThat(accountRepository.findByDocumentNumber("12345678977")).isNull();
 
     }
 }

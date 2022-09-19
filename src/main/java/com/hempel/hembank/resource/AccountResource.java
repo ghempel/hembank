@@ -29,7 +29,7 @@ public class AccountResource {
     private final AccountRepository accountRepository;
 
     @GetMapping("/list")
-    public ResponseEntity<List<Account>> findById(){
+    public ResponseEntity<List<Account>> findAll(){
 
         return ResponseEntity.ok(accountRepository.findAll());
     }
