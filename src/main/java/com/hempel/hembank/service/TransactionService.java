@@ -9,6 +9,7 @@ import com.hempel.hembank.domain.Account;
 import com.hempel.hembank.domain.Transaction;
 import com.hempel.hembank.dto.TransactionDTO;
 import com.hempel.hembank.enums.OperationType;
+import com.hempel.hembank.repository.TransactionRepository;
 import com.hempel.hembank.transaction.TransactionHandler;
 
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ import lombok.AllArgsConstructor;
 public class TransactionService {
 
     private final AccountService accountService;
+    private final TransactionRepository transactionRepository;
     private final List<TransactionHandler> transactionHandlers;
 
     @Transactional
@@ -33,9 +35,9 @@ public class TransactionService {
                 .orElseThrow(() -> new IllegalArgumentException("TranscationHandler not found"));
 
         Transaction newTransaction = transcationHandler.handle(transactionDTO);
+        newTransaction.setAccount(account);
 
-        account.getTransactions().add(newTransaction);
-
-        accountService.save(account);
+        transactionRepository.save(newTransaction);
     }
+
 }

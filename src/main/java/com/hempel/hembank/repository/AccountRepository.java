@@ -10,5 +10,5 @@ import com.hempel.hembank.domain.Account;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, UUID> {
 
-    Boolean existsByDocumentNumber(String documentNumber);
+    Account findByDocumentNumber(String documentNumber);
 }

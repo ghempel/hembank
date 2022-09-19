@@ -17,14 +17,12 @@ import com.hempel.hembank.domain.Account;
 import com.hempel.hembank.domain.Transaction;
 import com.hempel.hembank.dto.TransactionDTO;
 import com.hempel.hembank.enums.OperationType;
+import com.hempel.hembank.repository.TransactionRepository;
 import com.hempel.hembank.transaction.TransactionPagamento;
 import com.hempel.hembank.transaction.TransactionSaque;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -42,15 +40,18 @@ public class TransactionServiceTest {
     @Mock
     private AccountService accountService;
 
+    @Mock
+    private TransactionRepository transactionRepository;
+
     @Captor
-    private ArgumentCaptor<Account> accountCaptor;
+    private ArgumentCaptor<Transaction> transactionCaptor;
 
     private TransactionService transactionService;
 
     @Before
     public void setup() {
 
-        transactionService = new TransactionService(accountService, List.of(transactionSaque, transactionPagamento));
+        transactionService = new TransactionService(accountService, transactionRepository, List.of(transactionSaque, transactionPagamento));
 
     }
 
@@ -71,22 +72,16 @@ public class TransactionServiceTest {
 
         transactionService.createTransaction(dto);
 
-        verify(accountService, times(1)).save(accountCaptor.capture());
         verify(accountService, times(1)).findById(eq(idAccount));
         verifyNoMoreInteractions(accountService);
 
-        Account accountSaved = accountCaptor.getValue();
+        verify(transactionRepository, times(1)).save(transactionCaptor.capture());
+        verifyNoMoreInteractions(transactionRepository);
 
-        assertThat(accountSaved).isNotNull();
-        assertThat(accountSaved.getId()).isEqualTo(idAccount);
-        assertThat(accountSaved.getDocumentNumber()).isEqualTo("01234567890");
-
-        assertThat(accountSaved.getTransactions()).isNotEmpty();
-        assertThat(accountSaved.getTransactions()).hasSize(1);
-
-        Transaction transactionSaved = accountSaved.getTransactions().get(0);
+        Transaction transactionSaved = transactionCaptor.getValue();
 
         assertThat(transactionSaved).isNotNull();
+        assertThat(transactionSaved.getAccount()).isEqualTo(Account.of(idAccount));
         assertThat(transactionSaved.getOperationType()).isEqualTo(OperationType.SAQUE);
         assertThat(transactionSaved.getAmount()).isEqualTo(BigDecimal.TEN.negate());
 
@@ -109,22 +104,16 @@ public class TransactionServiceTest {
 
         transactionService.createTransaction(dto);
 
-        verify(accountService, times(1)).save(accountCaptor.capture());
         verify(accountService, times(1)).findById(eq(idAccount));
         verifyNoMoreInteractions(accountService);
 
-        Account accountSaved = accountCaptor.getValue();
+        verify(transactionRepository, times(1)).save(transactionCaptor.capture());
+        verifyNoMoreInteractions(transactionRepository);
 
-        assertThat(accountSaved).isNotNull();
-        assertThat(accountSaved.getId()).isEqualTo(idAccount);
-        assertThat(accountSaved.getDocumentNumber()).isEqualTo("01234567890");
-
-        assertThat(accountSaved.getTransactions()).isNotEmpty();
-        assertThat(accountSaved.getTransactions()).hasSize(1);
-
-        Transaction transactionSaved = accountSaved.getTransactions().get(0);
+        Transaction transactionSaved = transactionCaptor.getValue();
 
         assertThat(transactionSaved).isNotNull();
+        assertThat(transactionSaved.getAccount()).isEqualTo(Account.of(idAccount));
         assertThat(transactionSaved.getOperationType()).isEqualTo(OperationType.PAGAMENTO);
         assertThat(transactionSaved.getAmount()).isEqualTo(BigDecimal.TEN);
 

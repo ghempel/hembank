@@ -26,7 +26,9 @@ public class AccountService {
     @Transactional
     public void save(Account account) {
 
-        if(Objects.isNull(account.getId()) && Boolean.TRUE.equals(accountRepository.existsByDocumentNumber(account.getDocumentNumber()))) {
+        Account accountFound = accountRepository.findByDocumentNumber(account.getDocumentNumber());
+
+        if(Objects.nonNull(accountFound) && !accountFound.getId().equals(account.getId())) {
 
             throw new IllegalArgumentException(String.format(
                     "An account already exists with the document number: [%s].", account.getDocumentNumber()));

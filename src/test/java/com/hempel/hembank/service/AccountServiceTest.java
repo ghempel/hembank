@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.hempel.hembank.domain.Account;
-import com.hempel.hembank.domain.Transaction;
 import com.hempel.hembank.repository.AccountRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -68,16 +67,19 @@ public class AccountServiceTest {
         accountService.save(account);
 
         verify(accountRepository, times(1)).save(eq(account));
-        verify(accountRepository, times(1)).existsByDocumentNumber(eq("01234567890"));
+        verify(accountRepository, times(1)).findByDocumentNumber(eq("01234567890"));
         verifyNoMoreInteractions(accountRepository);
     }
 
     @Test
     public void saveWhenDocumentNumberAlreadyExists(){
 
-        when(accountRepository.existsByDocumentNumber(eq("01234567890"))).thenReturn(Boolean.TRUE);
+        UUID id = UUID.fromString("9e31f5d7-6964-4fe5-a22c-9254db0e178c");
+
+        when(accountRepository.findByDocumentNumber(eq("01234567890"))).thenReturn(Account.of(id));
 
         Account account = new Account();
+        account.setId(UUID.fromString("5b3c7b7b-6244-4a22-9b50-d021734b6071"));
         account.setDocumentNumber("01234567890");
 
         assertThatThrownBy(() -> accountService.save(account))
@@ -86,15 +88,15 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void saveAccountWithoutCallExists(){
+    public void saveAccountWithId(){
 
         Account account = Account.of(UUID.fromString("5b3c7b7b-6244-4a22-9b50-d021734b6071"));
         account.setDocumentNumber("01234567890");
-        account.getTransactions().add(new Transaction());
 
         accountService.save(account);
 
         verify(accountRepository, times(1)).save(eq(account));
+        verify(accountRepository, times(1)).findByDocumentNumber(eq("01234567890"));
         verifyNoMoreInteractions(accountRepository);
     }
 }
