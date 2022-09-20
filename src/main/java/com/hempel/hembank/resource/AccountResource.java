@@ -18,6 +18,7 @@ import com.hempel.hembank.domain.Account;
 import com.hempel.hembank.repository.AccountRepository;
 import com.hempel.hembank.service.AccountService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -29,6 +30,7 @@ public class AccountResource {
     private final AccountRepository accountRepository;
 
     @GetMapping("/list")
+    @Operation(summary = "Foi criado apenas para identificar as Accounts criadas. findAll é ruim!")
     public ResponseEntity<List<Account>> findAll(){
 
         return ResponseEntity.ok(accountRepository.findAll());
